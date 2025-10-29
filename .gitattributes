@@ -1,0 +1,5 @@
+*.csv filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text
+data/ingested_data/BX-Books.csv filter=lfs diff=lfs merge=lfs -text
+data/serialized_objects/final_rating.pkl filter=lfs diff=lfs merge=lfs -text
+data/clean_data/clean_data.csv filter=lfs diff=lfs merge=lfs -text
