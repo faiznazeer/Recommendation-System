@@ -1,4 +1,6 @@
 scikit-learn
 numpy
 pandas
-yaml
+pyyaml
+streamlit
+plotly

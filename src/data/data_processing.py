@@ -10,8 +10,8 @@ class DataProcessing:
 
     def preprocess_data(self):
         try:
-            ratings = pd.read_csv(self.data_processing_config.ratings_csv_file, sep=";", error_bad_lines=False, encoding='latin-1')
-            books = pd.read_csv(self.data_processing_config.books_csv_file, sep=";", error_bad_lines=False, encoding='latin-1')
+            ratings = pd.read_csv(self.data_processing_config['ratings_csv_file'], sep=";", on_bad_lines='skip', encoding='latin-1')
+            books = pd.read_csv(self.data_processing_config['books_csv_file'], sep=";", on_bad_lines='skip', encoding='latin-1')
             
             logging.info(f" Shape of ratings data file: {ratings.shape}")
             logging.info(f" Shape of books data file: {books.shape}")
@@ -44,14 +44,14 @@ class DataProcessing:
             logging.info(f" Shape of the final clean dataset: {final_rating.shape}")
                         
             # Saving the cleaned data for transformation
-            os.makedirs(self.data_processing_config.clean_data_dir, exist_ok=True)
-            final_rating.to_csv(os.path.join(self.data_processing_config.clean_data_dir,'clean_data.csv'), index = False)
-            logging.info(f"Saved cleaned data to {self.data_processing_config.clean_data_dir}")
+            os.makedirs(self.data_processing_config['clean_data_dir'], exist_ok=True)
+            final_rating.to_csv(os.path.join(self.data_processing_config['clean_data_dir'],'clean_data.csv'), index = False)
+            logging.info(f"Saved cleaned data to {self.data_processing_config['clean_data_dir']}")
 
             #saving final_rating objects for web app
-            os.makedirs(self.data_processing_config.serialized_objects_dir, exist_ok=True)
-            pickle.dump(final_rating,open(os.path.join(self.data_processing_config.serialized_objects_dir, "final_rating.pkl"),'wb'))
-            logging.info(f"Saved final_rating serialization object to {self.data_processing_config.serialized_objects_dir}")
+            os.makedirs(self.data_processing_config['serialized_objects_dir'], exist_ok=True)
+            pickle.dump(final_rating,open(os.path.join(self.data_processing_config['serialized_objects_dir'], "final_rating.pkl"),'wb'))
+            logging.info(f"Saved final_rating serialization object to {self.data_processing_config['serialized_objects_dir']}")
 
         except Exception as e:
-            raise Error("Preprocessing data failed...\n", e)
+            print("Preprocessing data failed...\n", e)

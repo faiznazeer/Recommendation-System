@@ -4,9 +4,18 @@ from src.utils.utils import cosine_similarities_sparse
 
 
 class ContentBasedRecommender:
-    def __init__(self, books_df, tfidf_matrix, tfidf_vectorizer):
+    def __init__(self, books_df=None, tfidf_matrix=None, tfidf_vectorizer=None):
         self.books_df = books_df
         self.tfidf_matrix = tfidf_matrix
+        self.tfidf_vectorizer = tfidf_vectorizer
+
+    def set_books_df(self, books_df):
+        self.books_df = books_df
+
+    def set_tfidf_matrix(self, tfidf_matrix):
+        self.tfidf_matrix = tfidf_matrix
+
+    def set_tfidf_vectorizer(self, tfidf_vectorizer):
         self.tfidf_vectorizer = tfidf_vectorizer
         
     def create_user_profile(self, liked_books_isbns, ratings=None):
