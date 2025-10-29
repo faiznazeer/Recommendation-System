@@ -1,39 +1,25 @@
-# Use Python 3.9 slim image as base
 FROM python:3.12-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire application
 COPY . .
 
-# Create necessary data directories
-RUN mkdir -p /app/data/raw_data \
-    /app/data/ingested_data \
-    /app/data/serialized_objects \
-    /app/data/clean_data \
-    /app/data/model_artifacts \
-    /app/data/artifacts \
-    /app/logs
+RUN mkdir -p /app/logs
 
-# Set environment variables
+# Cloud Run provides the port dynamically through $PORT
+# So, use that instead of hardcoding 8501
+ENV PORT=8080
 ENV PYTHONPATH=/app
-ENV STREAMLIT_SERVER_PORT=8501
-ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
 
-# Expose port for Streamlit
-EXPOSE 8501
+# Streamlit should bind to 0.0.0.0 and use $PORT
+# Disable CORS and XSRF protection for container environments (adjust if needed)
+EXPOSE 8080
 
-# Run Streamlit
-CMD ["streamlit", "run", "main.py"]
+CMD ["bash", "-lc", "streamlit run main.py --server.port $PORT --server.address 0.0.0.0 --server.enableCORS false --server.enableXsrfProtection false --server.headless true"]
